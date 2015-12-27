@@ -1,6 +1,7 @@
-# arvin
+# Marvin
 
-**TODO: Add description**
+Slack bots using Elixir.
+
 
 ## Installation
 
