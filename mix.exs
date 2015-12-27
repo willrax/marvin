@@ -5,6 +5,8 @@ defmodule Marvin.Mixfile do
     [app: :marvin,
      version: "0.1.0",
      elixir: "~> 1.1",
+     description: description,
+     package: package,
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
      deps: deps]
@@ -31,8 +33,8 @@ defmodule Marvin.Mixfile do
   end
 
   defp package do
-    %{maintainers: ["Will Raxworthy"],
+    [maintainers: ["Will Raxworthy"],
       licenses: ["MIT"],
-      links: %{"Github": "https://github.com/willrax/marvin"}}
+      links: %{"GitHub": "https://github.com/willrax/marvin"}]
   end
 end
