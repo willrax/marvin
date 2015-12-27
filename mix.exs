@@ -23,4 +23,16 @@ defmodule Marvin.Mixfile do
       {:websocket_client, git: "https://github.com/jeremyong/websocket_client"}
     ]
   end
+
+  defp description do
+    """
+    A Slack bot framework.
+    """
+  end
+
+  defp package do
+    %{maintainers: ["Will Raxworthy"],
+      licenses: ["MIT"],
+      links: %{"Github": "https://github.com/willrax/marvin"}}
+  end
 end
