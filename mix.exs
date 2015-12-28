@@ -3,7 +3,7 @@ defmodule Marvin.Mixfile do
 
   def project do
     [app: :marvin,
-     version: "0.1.0",
+     version: "0.1.1",
      elixir: "~> 1.1",
      description: description,
      package: package,
