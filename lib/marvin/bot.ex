@@ -59,7 +59,7 @@ defmodule Marvin.Bot do
         end
       end
 
-      def handle_message(_message, _slack), do: nil
+      def handle_message({_type, _message}, _slack), do: nil
 
       defoverridable [handle_message: 2]
     end
