@@ -18,6 +18,8 @@ def deps do
 end
 ```
 
+You'll need to add `websocket_client` manually.
+
 2. Ensure marvin is started before your application:
 
 ```elixir
@@ -40,7 +42,7 @@ Bots are simple to create and can respond to mentions, direct messages and ambie
 defmodule EchoBot do
   use Marvin.Bot
 
-  def handle_direct_message(message, slack) do
+  def handle_direct(message, slack) do
     send_message(message.text, message.channel, slack)
   end
 
