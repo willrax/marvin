@@ -25,5 +25,5 @@ defmodule Marvin.Core do
     {:ok, state}
   end
 
-  def handle_message(message, _slack, state), do: {:ok, state}
+  def handle_message(_message, _slack, state), do: {:ok, state}
 end
