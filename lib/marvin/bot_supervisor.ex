@@ -5,6 +5,9 @@ defmodule Marvin.BotSupervisor do
     Supervisor.start_link(__MODULE__, bots, [])
   end
 
+  @doc """
+  Initiate each bot and supervise them.
+  """
   def init(bots) do
     bots
     |> Enum.map(fn(bot) -> worker(bot, []) end)
