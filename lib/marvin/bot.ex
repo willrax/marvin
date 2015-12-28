@@ -11,11 +11,11 @@ defmodule Marvin.Bot do
     defmodule EchoBot do
       use Marvin.Bot
 
-      def handle_message({:direct_message, message}, slack) do
+      def handle_direct(message, slack) do
         send_message(message.text, message.channel, slack)
       end
 
-      def handle_message({:mention, message}, slack) do
+      def handle_mention(message, slack) do
         send_message(message.text, message.channel, slack)
       end
     end
@@ -46,22 +46,26 @@ defmodule Marvin.Bot do
       end
 
       def dispatch_message(message = %{channel: "D" <> code}, slack) do
-        handle_message({:direct, message}, slack)
+        handle_direct(message, slack)
       end
 
       def dispatch_message(message, slack) do
         me = slack.me.id
 
         if String.match?(message.text, ~r/#{me}/) do
-          handle_message({:mention, message}, slack)
+          handle_mention(message, slack)
         else
-          handle_message({:ambient, message}, slack)
+          handle_ambient(message, slack)
         end
       end
 
-      def handle_message({_type, _message}, _slack), do: nil
+      def handle_direct(_message, _slack), do: nil
+      def handle_ambient(_message, _slack), do: nil
+      def handle_mention(_message, _slack), do: nil
 
-      defoverridable [handle_message: 2]
+      defoverridable [handle_ambient: 2,
+        handle_direct: 2,
+        handle_mention: 2]
     end
   end
 end
