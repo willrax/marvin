@@ -22,7 +22,9 @@ defmodule Marvin.Mixfile do
   defp deps do
     [
       {:slack, "0.3.0"},
-      {:websocket_client, git: "https://github.com/jeremyong/websocket_client"}
+      {:websocket_client, git: "https://github.com/jeremyong/websocket_client"},
+      {:earmark, ">= 0.0.0"},
+      {:ex_doc, "~> 0.10", only: :dev}
     ]
   end
 
