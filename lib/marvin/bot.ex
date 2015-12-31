@@ -11,6 +11,8 @@ defmodule Marvin.Bot do
     defmodule EchoBot do
       use Marvin.Bot
 
+      match ~r/hello/
+
       def handle_direct(message, slack) do
         send_message(message.text, message.channel, slack)
       end
@@ -21,10 +23,10 @@ defmodule Marvin.Bot do
     end
     ```
 
-    In this example the bot is listening for mentions (@yourbot
-    / yourbot) and  and for direct messages. It then takes the text
-    from the received message and sending it back to the channel it
-    came in from.
+    In this example the bot is listening for mentions that include
+    the phrase "hello" (@yourbot / yourbot) and  and for direct
+    messages. It then takes the text from the received message and
+    sending it back to the channel it came in from.
   """
 
   defmacro __using__(_) do
