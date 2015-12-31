@@ -32,6 +32,8 @@ defmodule Marvin.Bot do
       use GenServer
       import Slack
 
+      import unquote(__MODULE__)
+
       def start_link() do
         GenServer.start_link(__MODULE__, [], name: __MODULE__)
       end
@@ -41,7 +43,7 @@ defmodule Marvin.Bot do
       end
 
       def handle_cast({:handle_event, {message, slack}}, state) do
-        dispatch_message(message, slack)
+        if is_match?(message), do: dispatch_message(message, slack)
         {:noreply, state}
       end
 
@@ -63,9 +65,25 @@ defmodule Marvin.Bot do
       def handle_ambient(_message, _slack), do: nil
       def handle_mention(_message, _slack), do: nil
 
+      def match(_pattern), do: ~r//
+
       defoverridable [handle_ambient: 2,
         handle_direct: 2,
-        handle_mention: 2]
+        handle_mention: 2,
+        match: 1]
+    end
+  end
+
+  def send_attachment(attachments, channel, slack) do
+    [attachments: JSX.encode!(attachments), channel: channel]
+    |> Marvin.WebAPI.post_message
+  end
+
+  defmacro match(pattern) do
+    quote do
+      def is_match?(message) do
+        String.match?(message.text, unquote(pattern))
+      end
     end
   end
 end

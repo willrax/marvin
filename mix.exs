@@ -14,17 +14,19 @@ defmodule Marvin.Mixfile do
 
   def application do
     [
-      applications: [:logger, :slack],
+      applications: [:logger, :slack, :httpoison],
       mod: {Marvin, []}
     ]
   end
 
   defp deps do
     [
+      {:earmark, ">= 0.0.0", only: :dev},
+      {:ex_doc, "~> 0.10", only: :dev},
       {:slack, "0.3.0"},
       {:websocket_client, git: "https://github.com/jeremyong/websocket_client"},
-      {:earmark, ">= 0.0.0", only: :dev},
-      {:ex_doc, "~> 0.10", only: :dev}
+      {:ibrowse, "~> 4.2"},
+      {:httpotion, "~> 2.1"}
     ]
   end
 
