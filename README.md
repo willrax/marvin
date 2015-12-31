@@ -42,6 +42,9 @@ Bots are simple to create and can respond to mentions, direct messages and ambie
 defmodule EchoBot do
   use Marvin.Bot
 
+  # here you can set a specific regex pattern to match against
+  match ~r//
+
   def handle_direct(message, slack) do
     send_message(message.text, message.channel, slack)
   end
