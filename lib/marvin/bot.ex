@@ -45,7 +45,7 @@ defmodule Marvin.Bot do
       end
 
       def handle_cast({:handle_event, {message, slack}}, state) do
-        if is_match?(message), do: dispatch_message(message, slack)
+        dispatch_message(message, slack)
         {:noreply, state}
       end
 

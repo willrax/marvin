@@ -16,11 +16,13 @@ defmodule Marvin.Core do
   bots. These bots are set in the applications configuration file.
   """
   def handle_message(message = %{type: "message"}, slack, state) do
-    bots = Application.get_env(:marvin, :bots)
+    if message.user != slack.me.id do
+      bots = Application.get_env(:marvin, :bots)
 
-    Enum.each(bots, fn(bot) ->
-      bot.handle_event(message, slack)
-    end)
+      Enum.each(bots, fn(bot) ->
+        if bot.is_match?(message.text), do: bot.handle_event(message, slack)
+      end)
+    end
 
     {:ok, state}
   end
