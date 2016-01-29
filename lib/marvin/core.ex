@@ -20,7 +20,7 @@ defmodule Marvin.Core do
       bots = Application.get_env(:marvin, :bots)
 
       Enum.each(bots, fn(bot) ->
-        if bot.is_match?(message.text), do: bot.handle_event(message, slack)
+        if bot.is_match?(message), do: bot.handle_event(message, slack)
       end)
     end
 
