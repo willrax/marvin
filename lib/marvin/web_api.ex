@@ -16,4 +16,10 @@ defmodule Marvin.WebAPI do
   def process_url(url) do
     "https://slack.com/api" <> url
   end
+
+  defp process_response_body(body) do
+    body
+    |> Poison.decode!
+    |> Enum.reduce(%{}, fn {k, v}, map -> Dict.put(map, String.to_atom(k), v) end)
+  end
 end
