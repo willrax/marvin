@@ -7,6 +7,7 @@
   "ibrowse": {:hex, :ibrowse, "4.2.2"},
   "idna": {:hex, :idna, "1.0.2"},
   "jsx": {:hex, :jsx, "2.4.0"},
+  "poison": {:hex, :poison, "2.0.1"},
   "slack": {:hex, :slack, "0.3.0"},
   "ssl_verify_hostname": {:hex, :ssl_verify_hostname, "1.0.6"},
   "websocket_client": {:git, "https://github.com/jeremyong/websocket_client", "f6892c8b55004008ce2d52be7d98b156f3e34569", []}}

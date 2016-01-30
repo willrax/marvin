@@ -26,7 +26,8 @@ defmodule Marvin.Mixfile do
       {:slack, "0.3.0"},
       {:websocket_client, git: "https://github.com/jeremyong/websocket_client"},
       {:ibrowse, "~> 4.2"},
-      {:httpotion, "~> 2.1"}
+      {:httpotion, "~> 2.1"},
+      {:poison, "~> 2.0"}
     ]
   end
 
