@@ -1,18 +1,19 @@
 defmodule Marvin.WebAPI do
-  @endpoint "https://slack.com/api"
+  use HTTPoison.Base
 
-  def post_message(params) do
+  def admin_api(method, params \\ []) do
     body = params
-    |> Keyword.put(:token, Application.get_env(:marvin, :slack_token))
-    |> Keyword.put(:as_user, true)
-
-    HTTPoison.post(@endpoint <> "/chat.postMessage", {:form, body})
+    |> Keyword.put(:token, Application.get_env(:marvin, :admin_token))
+    Marvin.WebAPI.post(method, {:form, body})
   end
 
-  def open_mpim(params) do
+  def api(method, params \\ []) do
     body = params
     |> Keyword.put(:token, Application.get_env(:marvin, :slack_token))
+    Marvin.WebAPI.post(method, {:form, body})
+  end
 
-    HTTPoison.post(@endpoint <> "/mpim.open", {:form, body})
+  def process_url(url) do
+    "https://slack.com/api" <> url
   end
 end
