@@ -10,6 +10,8 @@ defmodule Marvin.WebAPI do
   def api(method, params \\ []) do
     body = params
     |> Keyword.put(:token, Application.get_env(:marvin, :slack_token))
+    |> Keyword.put(:as_user, true)
+
     Marvin.WebAPI.post(method, {:form, body})
   end
 
@@ -20,6 +22,5 @@ defmodule Marvin.WebAPI do
   defp process_response_body(body) do
     body
     |> Poison.decode!
-    |> Enum.reduce(%{}, fn {k, v}, map -> Dict.put(map, String.to_atom(k), v) end)
   end
 end
