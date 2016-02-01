@@ -78,7 +78,7 @@ defmodule Marvin.Bot do
 
   def send_attachment(attachments, channel, slack) do
     body = [attachments: JSX.encode!(attachments), channel: channel]
-    Marvin.WebAPI.api("chat.postMessage", body)
+    Marvin.WebAPI.api("/chat.postMessage", body)
   end
 
   defmacro match(pattern) do

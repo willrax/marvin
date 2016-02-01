@@ -27,5 +27,9 @@ defmodule Marvin.Core do
     {:ok, state}
   end
 
+  def handle_message(message = %{type: "channel_joined"}, slack, state) do
+    {:ok, state}
+  end
+
   def handle_message(_message, _slack, state), do: {:ok, state}
 end
