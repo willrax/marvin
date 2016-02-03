@@ -6,6 +6,10 @@ defmodule Marvin.Core do
   with the underlying Slack dependency.
   """
 
+  def handle_message(message = %{type: "message", subtype: _}, slack, state) do
+    {:ok, state}
+  end
+
   def handle_message(message = %{type: "hello"}, slack, state) do
     IO.puts "Connected to #{slack.team.domain} as #{slack.me.name}"
     {:ok, state}
