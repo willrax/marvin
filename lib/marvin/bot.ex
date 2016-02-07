@@ -45,34 +45,14 @@ defmodule Marvin.Bot do
       end
 
       def handle_cast({:handle_event, {message, slack}}, state) do
-        dispatch_message(message, slack)
+        handle_message(message, slack)
         {:noreply, state}
       end
 
-      def dispatch_message(message = %{channel: "D" <> code}, slack) do
-        handle_direct(message, slack)
-      end
-
-      def dispatch_message(message, slack) do
-        me = slack.me.id
-
-        if String.match?(message.text, ~r/#{me}/) do
-          handle_mention(message, slack)
-        else
-          handle_ambient(message, slack)
-        end
-      end
-
-      def handle_direct(_message, _slack), do: nil
-      def handle_ambient(_message, _slack), do: nil
-      def handle_mention(_message, _slack), do: nil
-
+      def handle_message(_message, _slack), do: nil
       def match(_pattern), do: ~r//
 
-      defoverridable [handle_ambient: 2,
-        handle_direct: 2,
-        handle_mention: 2,
-        match: 1]
+      defoverridable [handle_message: 2, match: 1]
     end
   end
 
@@ -84,7 +64,7 @@ defmodule Marvin.Bot do
   defmacro match(pattern) do
     quote do
       def is_match?(message) do
-        String.match?(message.text, unquote(pattern))
+        String.match?(message, unquote(pattern))
       end
     end
   end
