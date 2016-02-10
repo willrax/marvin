@@ -36,7 +36,7 @@ defmodule Marvin.Core do
     {:ok, state}
   end
 
-  def handle_message(message = %{type: "reaction_added"}, slack, state) do
+  def handle_message(message = %{type: "reaction_" <> _type }, slack, state) do
     dispatch_message(:reaction, message, slack)
     {:ok, state}
   end
