@@ -61,11 +61,24 @@ defmodule Marvin.Bot do
     Marvin.WebAPI.api("/chat.postMessage", body)
   end
 
-  defmacro match(pattern) do
+  defmacro match(match_pair) when is_tuple(match_pair)  do
     quote do
-      def is_match?(message) do
-        String.match?(message, unquote(pattern))
+      def is_match?({incoming_type, incoming_message}) do
+        {type, pattern} = unquote(match_pair)
+        type == incoming_type && String.match?(incoming_message, pattern)
       end
+
+      def is_match?(_), do: false
+    end
+  end
+
+  defmacro match(type) when is_atom(type)  do
+    quote do
+      def is_match?(incoming_type) when is_atom(incoming_type) do
+        unquote(type) == incoming_type
+      end
+
+      def is_match?(_), do: false
     end
   end
 end
