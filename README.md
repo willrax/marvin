@@ -12,7 +12,7 @@ If [available in Hex](https://hex.pm/docs/publish), the package can be installed
 ```elixir
 def deps do
   [
-    {:marvin, "~> 0.2.0"},
+    {:marvin, "~> 0.3.0"},
     {:websocket_client, git: "https://github.com/jeremyong/websocket_client"}
   ]
 end
@@ -42,15 +42,14 @@ Bots are simple to create and can respond to mentions, direct messages and ambie
 defmodule EchoBot do
   use Marvin.Bot
 
-  # here you can set a specific regex pattern to match against
-  match ~r//
+  # Here you can set a specific type of message and a regex pattern to match against
+  # Direct includes mentions and direct discussions with the bot. Patterns are case
+  # sensitive by default.
 
-  def handle_direct(message, slack) do
-    send_message(message.text, message.channel, slack)
-  end
+  match {:direct, ~r/hello/}
 
-  def handle_mention(message, slack) do
-    send_message(message.text, message.channel, slack)
+  def handle_message(message, slack) do
+    send_message("Hi!", message.channel, slack)
   end
 end
 ```
@@ -60,3 +59,20 @@ Next you'll need to tell Marvin to start your bots by adding them to your config
 ```elixir
 config :marvin, bots: [EchoBot]
 ```
+
+You can also capture reactions being applied to a message.
+
+```elixir
+defmodule EchoBot do
+  use Marvin.Bot
+
+  match :reaction
+
+  def handle_message(message, slack) do
+    case message.reaction do
+      "coin" ->
+        IO.puts "A coin was given"
+      _ -> nil
+    end
+  end
+end
