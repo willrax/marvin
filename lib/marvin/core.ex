@@ -6,18 +6,20 @@ defmodule Marvin.Core do
   with the underlying Slack dependency.
   """
 
+  @doc "Handle and print connection details."
   def handle_message(_message = %{type: "hello"}, slack, state) do
-    IO.puts "Connected to #{slack.team.domain} as #{slack.me.name}"
+    IO.puts "Connected to #{slack.team.domain} as #{slack.me.name}."
     {:ok, state}
   end
 
+  @doc "Handle all message subtypes."
   def handle_message(_message = %{type: "message", subtype: _}, _slack, state) do
     {:ok, state}
   end
 
   @doc """
-  Receive incoming messages and cast them to each of the running
-  bots. These bots are set in the applications configuration file.
+  Handle a normal message. Decide whether it's a
+  direct or mention type message.
   """
   def handle_message(message = %{type: "message"}, slack, state) do
     if message.user != slack.me.id do
@@ -32,15 +34,18 @@ defmodule Marvin.Core do
     {:ok, state}
   end
 
+  @doc "Handle channel joined message."
   def handle_message(_message = %{type: "channel_joined"}, _slack, state) do
     {:ok, state}
   end
 
+  @doc "Capture and dispatch reaction_<added||removed>"
   def handle_message(message = %{type: "reaction_" <> _type }, slack, state) do
     dispatch_message(:reaction, message, slack)
     {:ok, state}
   end
 
+  @doc "Handle any uncaptured messages."
   def handle_message(_message, _slack, state), do: {:ok, state}
 
   defp dispatch_message(:direct, message, slack) do

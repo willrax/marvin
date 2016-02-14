@@ -11,13 +11,9 @@ defmodule Marvin.Bot do
     defmodule EchoBot do
       use Marvin.Bot
 
-      match ~r/hello/
+      match {:direct, ~r/^hello/}
 
-      def handle_direct(message, slack) do
-        send_message(message.text, message.channel, slack)
-      end
-
-      def handle_mention(message, slack) do
+      def handle_message(message, slack) do
         send_message(message.text, message.channel, slack)
       end
     end
