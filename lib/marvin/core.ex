@@ -61,7 +61,7 @@ defmodule Marvin.Core do
   defp dispatch_message(:ambient, message, slack) do
     Application.get_env(:marvin, :bots)
     |> Enum.each(fn(bot) ->
-      if bot.is_match?({:message, message.text}), do: bot.handle_event(message, slack)
+      if bot.is_match?({:ambient, message.text}), do: bot.handle_event(message, slack)
     end)
   end
 
