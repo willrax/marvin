@@ -30,7 +30,7 @@ defmodule Marvin.Core do
         String.match?(message.channel, ~r/^D/) ->
           dispatch_message(:direct, message, slack)
         true ->
-          dispatch_message(:message, message, slack)
+          dispatch_message(:ambient, message, slack)
       end
     end
 
@@ -58,7 +58,7 @@ defmodule Marvin.Core do
     end)
   end
 
-  defp dispatch_message(:message, message, slack) do
+  defp dispatch_message(:ambient, message, slack) do
     Application.get_env(:marvin, :bots)
     |> Enum.each(fn(bot) ->
       if bot.is_match?({:message, message.text}), do: bot.handle_event(message, slack)
