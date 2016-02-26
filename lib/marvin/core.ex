@@ -23,12 +23,15 @@ defmodule Marvin.Core do
   """
   def handle_message(message = %{type: "message"}, slack, state) do
     if message.user != slack.me.id do
-      if String.match?(message.text, ~r/#{slack.me.id}/) do
-        scrubbed_message = message |> scrub_indentifier(slack)
-        dispatch_message(:direct, scrubbed_message, slack)
+      cond do
+        String.match?(message.text, ~r/#{slack.me.id}/) ->
+          scrubbed_message = message |> scrub_indentifier(slack)
+          dispatch_message(:direct, scrubbed_message, slack)
+        String.match?(message.channel, ~r/^D/) ->
+          dispatch_message(:direct, message, slack)
+        true ->
+          dispatch_message(:ambient, message, slack)
       end
-
-      if String.match?(message.channel, ~r/^D/), do: dispatch_message(:direct, message, slack)
     end
 
     {:ok, state}
@@ -52,6 +55,13 @@ defmodule Marvin.Core do
     Application.get_env(:marvin, :bots)
     |> Enum.each(fn(bot) ->
       if bot.is_match?({:direct, message.text}), do: bot.handle_event(message, slack)
+    end)
+  end
+
+  defp dispatch_message(:ambient, message, slack) do
+    Application.get_env(:marvin, :bots)
+    |> Enum.each(fn(bot) ->
+      if bot.is_match?({:ambient, message.text}), do: bot.handle_event(message, slack)
     end)
   end
 
