@@ -11,7 +11,6 @@ defmodule Marvin.Supervisor do
 
     children = [
       worker(Marvin.Core, [token, []]),
-      worker(Marvin.BotSupervisor, [bots])
     ]
 
     supervise(children, strategy: :one_for_one)

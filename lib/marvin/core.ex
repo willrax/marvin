@@ -54,22 +54,26 @@ defmodule Marvin.Core do
   defp dispatch_message(:direct, message, slack) do
     Application.get_env(:marvin, :bots)
     |> Enum.each(fn(bot) ->
-      if bot.is_match?({:direct, message.text}), do: bot.handle_event(message, slack)
+      if bot.is_match?({:direct, message.text}), do: start_recipe(bot, message, slack)
     end)
   end
 
   defp dispatch_message(:ambient, message, slack) do
     Application.get_env(:marvin, :bots)
     |> Enum.each(fn(bot) ->
-      if bot.is_match?({:ambient, message.text}), do: bot.handle_event(message, slack)
+      if bot.is_match?({:ambient, message.text}), do: start_recipe(bot, message, slack)
     end)
   end
 
   defp dispatch_message(:reaction, message, slack) do
     Application.get_env(:marvin, :bots)
     |> Enum.each(fn(bot) ->
-      if bot.is_match?(:reaction), do: bot.handle_event(message, slack)
+      if bot.is_match?({:reaction, message.reaction}), do: start_recipe(bot, message, slack)
     end)
+  end
+
+  defp start_recipe(bot, message, slack) do
+    spawn fn -> bot.handle_message(message, slack) end
   end
 
   defp scrub_indentifier(message, slack) do
