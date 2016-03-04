@@ -1,5 +1,6 @@
 defmodule Marvin.Core do
   use Slack
+  require Logger
 
   @moduledoc """
   The core of Marvin. This module is responsible for interfacing
@@ -8,19 +9,11 @@ defmodule Marvin.Core do
 
   @doc "Handle and print connection details."
   def handle_message(_message = %{type: "hello"}, slack, state) do
-    IO.puts "Connected to #{slack.team.domain} as #{slack.me.name}."
+    Logger.info("Connected to #{slack.team.domain} as #{slack.me.name}")
     {:ok, state}
   end
 
-  @doc "Handle all message subtypes."
-  def handle_message(_message = %{type: "message", subtype: _}, _slack, state) do
-    {:ok, state}
-  end
-
-  @doc """
-  Handle a normal message. Decide whether it's a
-  direct or mention type message.
-  """
+  def handle_message(_message = %{type: "message", subtype: _}, _slack, state), do: {:ok, state}
   def handle_message(message = %{type: "message"}, slack, state) do
     if message.user != slack.me.id do
       cond do
@@ -37,19 +30,26 @@ defmodule Marvin.Core do
     {:ok, state}
   end
 
-  @doc "Handle channel joined message."
-  def handle_message(_message = %{type: "channel_joined"}, _slack, state) do
-    {:ok, state}
-  end
-
   @doc "Capture and dispatch reaction_<added||removed>"
   def handle_message(message = %{type: "reaction_" <> _type }, slack, state) do
     dispatch_message(:reaction, message, slack)
     {:ok, state}
   end
 
-  @doc "Handle any uncaptured messages."
+  def handle_message(_message = %{type: "channel_joined"}, _slack, state), do: {:ok, state}
   def handle_message(_message, _slack, state), do: {:ok, state}
+
+  defp scrub_indentifier(message, slack) do
+    bot_identifier = "<@#{slack.me.id}>: "
+    new_text = remove_prefix(message.text, bot_identifier)
+    Map.put(message, :text, new_text)
+  end
+
+  defp remove_prefix(full, prefix) do
+    base = byte_size(prefix)
+    <<_ :: binary-size(base), rest :: binary>> = full
+    rest
+  end
 
   defp dispatch_message(:direct, message, slack) do
     Application.get_env(:marvin, :bots)
@@ -74,17 +74,5 @@ defmodule Marvin.Core do
 
   defp start_recipe(bot, message, slack) do
     spawn fn -> bot.handle_message(message, slack) end
-  end
-
-  defp scrub_indentifier(message, slack) do
-    bot_identifier = "<@#{slack.me.id}>: "
-    new_text = remove_prefix(message.text, bot_identifier)
-    Map.put(message, :text, new_text)
-  end
-
-  defp remove_prefix(full, prefix) do
-    base = byte_size(prefix)
-    <<_ :: binary-size(base), rest :: binary>> = full
-    rest
   end
 end
