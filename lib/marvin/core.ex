@@ -1,6 +1,11 @@
 defmodule Marvin.Core do
   use Slack
+
   require Logger
+
+  require IEx
+
+  alias Marvin.Model.Conversation
 
   @moduledoc """
   The core of Marvin. This module is responsible for interfacing
@@ -13,10 +18,14 @@ defmodule Marvin.Core do
     {:ok, state}
   end
 
+  # matching a conversation is the last thing you want to do.
+
   def handle_message(_message = %{type: "message", subtype: _}, _slack, state), do: {:ok, state}
   def handle_message(message = %{type: "message"}, slack, state) do
     if message.user != slack.me.id do
       cond do
+        Conversation.exists?(message) ->
+          dispatch_conversation(message, slack)
         String.match?(message.text, ~r/#{slack.me.id}/) ->
           scrubbed_message = message |> scrub_indentifier(slack)
           dispatch_message(:direct, scrubbed_message, slack)
@@ -49,6 +58,11 @@ defmodule Marvin.Core do
     base = byte_size(prefix)
     <<_ :: binary-size(base), rest :: binary>> = full
     rest
+  end
+
+  def dispatch_conversation(message, slack) do
+    conversation = Conversation.get(message)
+    conversation.bot.handle_message(message, slack, conversation)
   end
 
   defp dispatch_message(:direct, message, slack) do

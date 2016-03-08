@@ -14,7 +14,7 @@ defmodule Marvin.Mixfile do
 
   def application do
     [
-      applications: [:logger, :slack, :httpoison],
+      applications: [:logger, :slack, :httpoison, :con_cache],
       mod: {Marvin, []}
     ]
   end
@@ -27,7 +27,8 @@ defmodule Marvin.Mixfile do
       {:websocket_client, git: "https://github.com/jeremyong/websocket_client"},
       {:ibrowse, "~> 4.2"},
       {:httpotion, "~> 2.1"},
-      {:poison, "~> 2.0"}
+      {:poison, "~> 2.0"},
+      {:con_cache, "~> 0.11.0"}
     ]
   end
 

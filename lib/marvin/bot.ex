@@ -32,9 +32,10 @@ defmodule Marvin.Bot do
       import unquote(__MODULE__)
 
       def handle_message(_message, _slack), do: nil
+      def is_match?(_), do: false
       def match({_type, _pattern}), do: {:direct, ~r//}
 
-      defoverridable [handle_message: 2, match: 1]
+      defoverridable [handle_message: 2, match: 1, is_match?: 1]
     end
   end
 

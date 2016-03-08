@@ -11,6 +11,7 @@ defmodule Marvin.Supervisor do
 
     children = [
       worker(Marvin.Core, [token, []]),
+      worker(ConCache, [[], [name: :conversations]])
     ]
 
     supervise(children, strategy: :one_for_one)
