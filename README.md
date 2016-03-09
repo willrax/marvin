@@ -66,13 +66,9 @@ You can also capture reactions being applied to a message.
 defmodule EchoBot do
   use Marvin.Bot
 
-  match :reaction
+  match {:reaction, "coin"}
 
   def handle_message(message, slack) do
-    case message.reaction do
-      "coin" ->
-        IO.puts "A coin was given"
-      _ -> nil
-    end
+    IO.puts "A coin was given"
   end
 end
