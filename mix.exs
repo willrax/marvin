@@ -23,7 +23,7 @@ defmodule Marvin.Mixfile do
     [
       {:earmark, ">= 0.0.0", only: :dev},
       {:ex_doc, "~> 0.10", only: :dev},
-      {:slack, "0.3.0"},
+      {:slack, "0.6.0"},
       {:websocket_client, git: "https://github.com/jeremyong/websocket_client"},
       {:ibrowse, "~> 4.2"},
       {:httpotion, "~> 2.1"},
