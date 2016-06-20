@@ -28,6 +28,7 @@ defmodule Marvin.Bot do
   defmacro __using__(_) do
     quote do
       import Slack
+      import Slack.Sends
 
       import unquote(__MODULE__)
 
