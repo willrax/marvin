@@ -12,7 +12,7 @@ If [available in Hex](https://hex.pm/docs/publish), the package can be installed
 ```elixir
 def deps do
   [
-    {:marvin, "~> 0.3.0"},
+    {:marvin, "~> 0.3.1"},
     {:websocket_client, git: "https://github.com/jeremyong/websocket_client"}
   ]
 end
